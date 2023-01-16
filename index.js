@@ -21,6 +21,7 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db('Car_Mechanic').collection('Services');
+        const orderCollection = client.db('Car_Mechanic').collection('Orders');
 
         // get all service data
         app.get('/service', async (req, res) => {
@@ -54,6 +55,23 @@ async function run() {
             const query = {_id : ObjectId(id)};
 
             const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
+
+        //  all order api here -------------------------------------
+        
+        // create a new order in a new database collection
+        app.post('/order', async(req, res)=>{
+            const doc = req.body;
+            const result = await orderCollection.insertOne(doc);
+            res.send(result);
+        })
+
+        // get orders data
+        app.get('/order',async(req,res)=>{
+            const query = {};
+            const cursor = orderCollection.find(query);
+            const result = await cursor.toArray();
             res.send(result);
         })
 
