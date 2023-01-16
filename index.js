@@ -22,6 +22,7 @@ async function run() {
         await client.connect();
         const userCollection = client.db('Car_Mechanic').collection('Services');
 
+        // get all service data
         app.get('/service', async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
@@ -30,6 +31,7 @@ async function run() {
             res.send(services);
         })
 
+        // get single service data
         app.get('/service/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id : ObjectId(id)};
@@ -39,12 +41,14 @@ async function run() {
             res.send(result);
         })
 
+        // add a service in database
         app.post('/addservice', async(req,res)=>{
             const doc = req.body;
             const result = await userCollection.insertOne(doc);
             res.send(result);
         })
 
+        // delete a service from database
         app.delete('/manage/:id', async(req, res)=>{
             const id = req.params.id;
             const query = {_id : ObjectId(id)};
