@@ -7,7 +7,8 @@ const app = express();
 
 require('dotenv').config();
 
-app.use(cors());
+app.use(cors());  
+
 app.use(express.json());
 
 
