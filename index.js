@@ -68,8 +68,10 @@ async function run() {
         })
 
         // get orders data
-        app.get('/order',async(req,res)=>{
-            const query = {};
+        app.get('/order/:user',async(req,res)=>{
+            const user = req.params.user;
+
+            const query = { name : user};
             const cursor = orderCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
