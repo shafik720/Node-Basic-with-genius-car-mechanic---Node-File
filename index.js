@@ -31,6 +31,13 @@ async function run() {
             if(!authData){
                return res.status(401).send({message : "Unauthorized Access !"})
             }
+            const token = authData.split(' ')[1];
+            jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded)=>{
+                if(err){
+                    return res.status(403).send({message: 'Forbidden Access'});
+                }
+                console.log('decoded', decoded);
+            })
             next();
         }
         app.get('/orderData', jwtVerify,  async(req,res)=>{
