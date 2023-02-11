@@ -24,7 +24,17 @@ async function run() {
         const userCollection = client.db('Car_Mechanic').collection('Services');
         const orderCollection = client.db('Car_Mechanic').collection('Orders');
 
-        //jwt token
+        //---------------jwt token
+        app.get('/orderData', async(req,res)=>{
+            const authData = req.headers.authorization;
+            console.log(authData);
+            const email = req.query.email;
+            const query = {email : email};
+            const cursor = orderCollection.find(query);
+            const result = await cursor.toArray();
+            
+            res.send(result);
+        })
         app.post('/login', async(req, res)=>{
             const user = req.body;
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
@@ -87,14 +97,7 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/orderData', async(req,res)=>{
-            const email = req.query.email;
-            const query = {email : email};
-            const cursor = orderCollection.find(query);
-            const result = await cursor.toArray();
-            
-            res.send(result);
-        })
+       
 
     }
     finally { 
