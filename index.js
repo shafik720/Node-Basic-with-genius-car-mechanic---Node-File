@@ -61,7 +61,7 @@ async function run() {
         //  all order api here -------------------------------------
         
         // create a new order in a new database collection
-        app.post('/order', async(req, res)=>{
+        app.post('/addOrder', async(req, res)=>{
             const doc = req.body;
             const result = await orderCollection.insertOne(doc);
             res.send(result);
@@ -75,6 +75,16 @@ async function run() {
             const cursor = orderCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
+        })
+
+        app.get('/orderData', async(req,res)=>{
+            const email = req.query.email;
+            const query = {email : email};
+            const cursor = orderCollection.find(query);
+            const result = await cursor.toArray();
+            
+            res.send(result);
+            console.log(result);
         })
 
     }
