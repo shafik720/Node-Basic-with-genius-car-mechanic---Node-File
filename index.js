@@ -27,9 +27,12 @@ async function run() {
         //---------------jwt token
         function jwtVerify(req, res, next){
             const authData = req.headers.authorization;
-            console.log(authData);
+            console.log("Bearer from function",authData);
+            next();
         }
-        app.get('/orderData', async(req,res)=>{
+        app.get('/orderData', jwtVerify,  async(req,res)=>{
+            // const authData = req.headers.authorization;
+            // console.log(req.headers.authorization);
             
             const email = req.query.email;
             const query = {email : email};
