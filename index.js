@@ -28,6 +28,9 @@ async function run() {
         function jwtVerify(req, res, next){
             const authData = req.headers.authorization;
             console.log("Bearer from function",authData);
+            if(!authData){
+               return res.status(401).send({message : "Unauthorized Access !"})
+            }
             next();
         }
         app.get('/orderData', jwtVerify,  async(req,res)=>{
