@@ -29,7 +29,7 @@ async function run() {
             const authData = req.headers.authorization;
             console.log(authData);
         }
-        app.get('/orderData', jwtVerify, async(req,res)=>{
+        app.get('/orderData', async(req,res)=>{
             
             const email = req.query.email;
             const query = {email : email};
