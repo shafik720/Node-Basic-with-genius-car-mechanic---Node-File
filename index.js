@@ -25,9 +25,12 @@ async function run() {
         const orderCollection = client.db('Car_Mechanic').collection('Orders');
 
         //---------------jwt token
-        app.get('/orderData', async(req,res)=>{
+        function jwtVerify(req, res, next){
             const authData = req.headers.authorization;
             console.log(authData);
+        }
+        app.get('/orderData', jwtVerify, async(req,res)=>{
+            
             const email = req.query.email;
             const query = {email : email};
             const cursor = orderCollection.find(query);
