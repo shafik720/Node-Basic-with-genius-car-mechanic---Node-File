@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
+var jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -22,6 +23,15 @@ async function run() {
         await client.connect();
         const userCollection = client.db('Car_Mechanic').collection('Services');
         const orderCollection = client.db('Car_Mechanic').collection('Orders');
+
+        //jwt token
+        app.post('/login', async(req, res)=>{
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
+                expiresIn : '1d'
+            })
+            res.send({accessToken});
+        })
 
         // get all service data
         app.get('/service', async (req, res) => {
@@ -84,7 +94,6 @@ async function run() {
             const result = await cursor.toArray();
             
             res.send(result);
-            console.log(result);
         })
 
     }
