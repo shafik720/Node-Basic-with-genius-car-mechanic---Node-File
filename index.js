@@ -27,7 +27,6 @@ async function run() {
         //---------------jwt token
         function jwtVerify(req, res, next){
             const authData = req.headers.authorization;
-            console.log("Bearer from function",authData);
             if(!authData){
                return res.status(401).send({message : "Unauthorized Access !"})
             }
@@ -36,20 +35,25 @@ async function run() {
                 if(err){
                     return res.status(403).send({message: 'Forbidden Access'});
                 }
-                console.log('decoded', decoded);
+                req.decoded = decoded;
             })
             next();
         }
         app.get('/orderData', jwtVerify,  async(req,res)=>{
             // const authData = req.headers.authorization;
             // console.log(req.headers.authorization);
-            
+            const decodedEmail = req.decoded.email;
             const email = req.query.email;
-            const query = {email : email};
-            const cursor = orderCollection.find(query);
-            const result = await cursor.toArray();
-            
-            res.send(result);
+
+            if(email == decodedEmail){
+                const query = {email : email};
+                const cursor = orderCollection.find(query);
+                const result = await cursor.toArray();
+                
+                res.send(result);
+            }else{
+                res.status(403).send({message : 'Forbidden Access'});
+            }
         })
         app.post('/login', async(req, res)=>{
             const user = req.body;
